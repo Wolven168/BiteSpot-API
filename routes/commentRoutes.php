@@ -1,7 +1,8 @@
 <?php
 // routes/locationRoutes.php
 
-include_once '../controllers/LocationController.php';
+include_once '../config/db.php';
+include_once '../models/Location.php';
 
 header("Content-Type: application/json");
 
@@ -11,15 +12,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $longitude = $_GET['longitude'];
         $radius = $_GET['radius'];
 
-        // Call the controller method
-        $locations = LocationController::getLocations($latitude, $longitude, $radius);
-
-        // Return JSON response
+        $locations = Location::getLocationsWithinRadius($latitude, $longitude, $radius);
         echo json_encode($locations);
     } else {
         echo json_encode(["message" => "Missing parameters: latitude, longitude, and radius are required."]);
     }
-} else {
-    echo json_encode(["message" => "Invalid request method."]);
 }
 ?>
